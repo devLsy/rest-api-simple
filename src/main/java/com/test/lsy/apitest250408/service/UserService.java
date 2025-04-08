@@ -163,7 +163,6 @@ public class UserService {
                 .page(info.getPage())
                 .version(info.getVersion())
                 .build();
-
         pictureRepository.save(pictureEntity);
     }
 }

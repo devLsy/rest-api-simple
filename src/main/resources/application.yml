@@ -12,10 +12,11 @@ spring:
     restart.enabled: true
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: jdbc:log4jdbc:mysql://localhost:3309/security
+    #? ???? ????(docker mysql)
+    url: ENC(niMezBJuV+n1y4uSOeHcL7rdgAahpqmZXMcbAki8YG4P/E/K9vRM70etstqZz11mQ3ZQQS++9+A=)
     hikari:
-      username: cos
-      password: 1234
+      username: ENC(8/pfxOuBbUw1iExsqdmj4w==)
+      password: ENC(1qoMWBqW70Kc8EOL/hCz8w==)
       connectionTimeout: 10000
       maximum-pool-size: 15
       max-lifetime: 600000
@@ -28,3 +29,12 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
+
+
+jasypt:
+  encryptor:
+    # JasyprtConfig?? ?? ?
+    bean: jasyptStringEncryptor
+    property:
+      prefix: ENC(
+      suffix: )
