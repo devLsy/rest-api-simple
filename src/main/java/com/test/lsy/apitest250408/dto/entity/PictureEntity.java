@@ -16,16 +16,15 @@ public class PictureEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
 
-    private String seed;
-    private int results;
-    private int page;
-    private String version;
+    private String large;
+    private String medium;
+    private String thumbnail;
 
     @Builder
-    public PictureEntity(String seed, int results, int page, String version) {
-        this.seed = seed;
-        this.results = results;
-        this.page = page;
-        this.version = version;
+
+    public PictureEntity(String large, String medium, String thumbnail) {
+        this.large = large;
+        this.medium = medium;
+        this.thumbnail = thumbnail;
     }
 }

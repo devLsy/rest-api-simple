@@ -155,14 +155,14 @@ public class UserService {
                     .sha256(result.getLogin().getSha256())
                     .build();
             loginRepository.save(login);
+            
+            // 4. pictureEntity 저장
+            PictureEntity pictureEntity = PictureEntity.builder()
+                    .large(result.getPicture().getLarge())
+                    .medium(result.getPicture().getMedium())
+                    .thumbnail(result.getPicture().getThumbnail())
+                    .build();
+            pictureRepository.save(pictureEntity);
         });
-
-        PictureEntity pictureEntity = PictureEntity.builder()
-                .seed(info.getSeed())
-                .results(info.getResults())
-                .page(info.getPage())
-                .version(info.getVersion())
-                .build();
-        pictureRepository.save(pictureEntity);
     }
 }
