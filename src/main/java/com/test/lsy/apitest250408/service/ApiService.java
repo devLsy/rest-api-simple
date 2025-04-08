@@ -1,7 +1,6 @@
 package com.test.lsy.apitest250408.service;
 
 import com.test.lsy.apitest250408.dto.response1.Response;
-import com.test.lsy.apitest250408.dto.response1.ResultsItem;
 import com.test.lsy.apitest250408.dto.response2.ResponseItem1;
 import com.test.lsy.apitest250408.dto.response3.Response3;
 import com.test.lsy.apitest250408.dto.response4.ResponseItem2;
@@ -40,18 +39,21 @@ public class ApiService {
     // api 1
     public Response callApi1() {
         Response response = restTemplate.getForObject(url1, Response.class);
-        List<ResultsItem> results = response.getResults();
 
-        if(results.size() > 0) userService.saveUsers(results);
+        userService.saveUsers(restTemplate.getForObject(url1, Response.class));
         return response;
     }
 
     // api 2
     public List<ResponseItem1> callApi2() {
-        return restTemplate.exchange(url2,
+        List<ResponseItem1> list = restTemplate.exchange(url2,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<ResponseItem1>>() {}).getBody();
+                new ParameterizedTypeReference<List<ResponseItem1>>() {
+                }).getBody();
+
+        userService.saveUsers2(list);
+        return list;
     }
     // api 3
     public Response3 callApi3() {
