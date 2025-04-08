@@ -121,48 +121,59 @@ public class UserService {
         List<ResultsItem> results = response.getResults();
         Info info = response.getInfo();
 
-        results.stream().forEach(result -> {
-            // 1. EmpEntity 저장
-            EmpEntity emp = EmpEntity.builder()
-                    .gender(result.getGender())
-                    .titleName(result.getName().getTitle())
-                    .firstName(result.getName().getFirst())
-                    .lastName(result.getName().getLast())
-                    .build();
-            empRepository.save(emp);
+        try {
+            for (ResultsItem result : results) {
+                // 1. EmpEntity 저장
+                EmpEntity emp = EmpEntity.builder()
+                        .gender(result.getGender())
+                        .titleName(result.getName().getTitle())
+                        .firstName(result.getName().getFirst())
+                        .lastName(result.getName().getLast())
+                        .build();
+                empRepository.save(emp);
 
-            // 2. LocationEntity 저장
-            LocationEntity location = LocationEntity.builder()
-                    .streetNumber(result.getLocation().getStreet().getNumber())
-                    .streetName(result.getLocation().getStreet().getName())
-                    .city(result.getLocation().getCity())
-                    .state(result.getLocation().getState())
-                    .country(result.getLocation().getCountry())
-                    .postcode(result.getLocation().getPostcode())
-                    .latitude(result.getLocation().getCoordinates().getLatitude())
-                    .longitude(result.getLocation().getCoordinates().getLongitude())
-                    .build();
-            locationRepository.save(location);
+                // 2. LocationEntity 저장
+                LocationEntity location = LocationEntity.builder()
+                        .streetNumber(result.getLocation().getStreet().getNumber())
+                        .streetName(result.getLocation().getStreet().getName())
+                        .city(result.getLocation().getCity())
+                        .state(result.getLocation().getState())
+                        .country(result.getLocation().getCountry())
+                        .postcode(result.getLocation().getPostcode())
+                        .latitude(result.getLocation().getCoordinates().getLatitude())
+                        .longitude(result.getLocation().getCoordinates().getLongitude())
+                        .build();
+                locationRepository.save(location);
 
-            // 3. LoginEntity 저장
-            LoginEntity login = LoginEntity.builder()
-                    .uuid(result.getLogin().getUuid())
-                    .username(result.getLogin().getUsername())
-                    .password(result.getLogin().getPassword())
-                    .salt(result.getLogin().getSalt())
-                    .md5(result.getLogin().getMd5())
-                    .sha1(result.getLogin().getSha1())
-                    .sha256(result.getLogin().getSha256())
-                    .build();
-            loginRepository.save(login);
-            
-            // 4. pictureEntity 저장
-            PictureEntity pictureEntity = PictureEntity.builder()
-                    .large(result.getPicture().getLarge())
-                    .medium(result.getPicture().getMedium())
-                    .thumbnail(result.getPicture().getThumbnail())
-                    .build();
-            pictureRepository.save(pictureEntity);
-        });
+                // 3. LoginEntity 저장
+                LoginEntity login = LoginEntity.builder()
+                        .uuid(result.getLogin().getUuid())
+                        .username(result.getLogin().getUsername())
+                        .password(result.getLogin().getPassword())
+                        .salt(result.getLogin().getSalt())
+                        .md5(result.getLogin().getMd5())
+                        .sha1(result.getLogin().getSha1())
+                        .sha256(result.getLogin().getSha256())
+                        .build();
+                loginRepository.save(login);
+
+                // 4. pictureEntity 저장
+                PictureEntity pictureEntity = PictureEntity.builder()
+                        .large(result.getPicture().getLarge())
+                        .medium(result.getPicture().getMedium())
+                        .thumbnail(result.getPicture().getThumbnail())
+                        .build();
+                pictureRepository.save(pictureEntity);
+
+    //            throw new RuntimeException("강제 에러");
+            }
+
+        } catch(Exception e) {
+            // 예외 발생 시 로그 출력
+            log.error("saveUser5 중 예외 발생, 롤백합니다: {}", e.getMessage(), e);
+
+            // 다시 예외를 던져서 롤백 유도
+            throw new RuntimeException("saveUser5 실패 - 트랜잭션 롤백", e);
+        }
     }
 }
