@@ -76,4 +76,8 @@ public class ApiService {
 
         return list;
     }
+
+    public void callApi5() {
+        userService.saveUser5(restTemplate.getForObject(url1, Response.class));
+    }
 }

@@ -8,6 +8,7 @@ import com.test.lsy.apitest250408.service.ApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -37,5 +38,10 @@ public class ApiController {
     @GetMapping("/call-4")
     public List<ResponseItem2> call4() {
         return service.callApi4();
+    }
+
+    @PostMapping("/call-5")
+    public void call5() {
+        service.callApi5();
     }
 }

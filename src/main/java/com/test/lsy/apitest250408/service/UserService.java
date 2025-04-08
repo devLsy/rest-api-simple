@@ -26,6 +26,10 @@ public class UserService {
     private final User4Repository user4Repository;
     private final User5Repository user5Repository;
     private final InfoRepository infoRepository;
+    private final EmpRepository empRepository;
+    private final LocationRepository locationRepository;
+    private final PictureRepository pictureRepository;
+    private final LoginRepository loginRepository;
 
     @Transactional
     public void saveUsers(Response response) {
@@ -110,5 +114,56 @@ public class UserService {
                         user5Repository.save(user);
                     });
         }
+    }
+
+    @Transactional
+    public void saveUser5(Response response) {
+        List<ResultsItem> results = response.getResults();
+        Info info = response.getInfo();
+
+        results.stream().forEach(result -> {
+            // 1. EmpEntity 저장
+            EmpEntity emp = EmpEntity.builder()
+                    .gender(result.getGender())
+                    .titleName(result.getName().getTitle())
+                    .firstName(result.getName().getFirst())
+                    .lastName(result.getName().getLast())
+                    .build();
+            empRepository.save(emp);
+
+            // 2. LocationEntity 저장
+            LocationEntity location = LocationEntity.builder()
+                    .streetNumber(result.getLocation().getStreet().getNumber())
+                    .streetName(result.getLocation().getStreet().getName())
+                    .city(result.getLocation().getCity())
+                    .state(result.getLocation().getState())
+                    .country(result.getLocation().getCountry())
+                    .postcode(result.getLocation().getPostcode())
+                    .latitude(result.getLocation().getCoordinates().getLatitude())
+                    .longitude(result.getLocation().getCoordinates().getLongitude())
+                    .build();
+            locationRepository.save(location);
+
+            // 3. LoginEntity 저장
+            LoginEntity login = LoginEntity.builder()
+                    .uuid(result.getLogin().getUuid())
+                    .username(result.getLogin().getUsername())
+                    .password(result.getLogin().getPassword())
+                    .salt(result.getLogin().getSalt())
+                    .md5(result.getLogin().getMd5())
+                    .sha1(result.getLogin().getSha1())
+                    .sha256(result.getLogin().getSha256())
+                    .build();
+            loginRepository.save(login);
+        });
+
+        PictureEntity pictureEntity = PictureEntity.builder()
+                .seed(info.getSeed())
+                .results(info.getResults())
+                .page(info.getPage())
+                .version(info.getVersion())
+                .build();
+
+        pictureRepository.save(pictureEntity);
     }
 }
