@@ -1,13 +1,11 @@
 package com.test.lsy.apitest250408.service;
 
-import com.test.lsy.apitest250408.dto.entity.UserEntity;
 import com.test.lsy.apitest250408.dto.response1.Response;
 import com.test.lsy.apitest250408.dto.response1.ResultsItem;
 import com.test.lsy.apitest250408.dto.response2.ResponseItem1;
 import com.test.lsy.apitest250408.dto.response3.Response3;
 import com.test.lsy.apitest250408.dto.response4.ResponseItem2;
 import com.test.lsy.apitest250408.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +23,7 @@ public class ApiService {
 
     private final RestTemplate restTemplate;
     private final UserRepository repository;
+    private final UserService userService;
 
     @Value("${api.url1}")
     private String url1;
@@ -43,7 +42,7 @@ public class ApiService {
         Response response = restTemplate.getForObject(url1, Response.class);
         List<ResultsItem> results = response.getResults();
 
-        if(results.size() > 0) saveUsers(results);
+        if(results.size() > 0) userService.saveUsers(results);
         return response;
     }
 
@@ -65,20 +64,5 @@ public class ApiService {
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<ResponseItem2>>() {}).getBody();
-    }
-
-    @Transactional
-    public <T extends ResultsItem> void saveUsers(List<T> results) {
-        for (T result : results) {
-            UserEntity user = UserEntity.builder()
-                    .gender(result.getGender())
-                    .firstName(result.getName().getFirst())
-                    .lastName(result.getName().getLast())
-                    .email(result.getEmail())
-                    .phone(result.getPhone())
-                    .pictureUrl(result.getPicture().getLarge())
-                    .build();
-            repository.save(user);
-        }
     }
 }
