@@ -3,12 +3,15 @@ package com.test.lsy.apitest250408.service;
 import com.test.lsy.apitest250408.dto.entity.InfoEntity;
 import com.test.lsy.apitest250408.dto.entity.UserEntity;
 import com.test.lsy.apitest250408.dto.entity.UserEntity2;
+import com.test.lsy.apitest250408.dto.entity.UserEntity4;
 import com.test.lsy.apitest250408.dto.response1.Info;
 import com.test.lsy.apitest250408.dto.response1.Response;
 import com.test.lsy.apitest250408.dto.response1.ResultsItem;
 import com.test.lsy.apitest250408.dto.response2.ResponseItem1;
+import com.test.lsy.apitest250408.dto.response4.ResponseItem2;
 import com.test.lsy.apitest250408.repository.InfoRepository;
 import com.test.lsy.apitest250408.repository.User2Repository;
+import com.test.lsy.apitest250408.repository.User4Repository;
 import com.test.lsy.apitest250408.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +27,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final User2Repository user2Repository;
+    private final User4Repository user4Repository;
     private final InfoRepository infoRepository;
 
     @Transactional
@@ -61,15 +65,35 @@ public class UserService {
     public void saveUsers2(List<ResponseItem1> list) {
         if(list.size() > 0) {
             list.stream().map(result -> UserEntity2.builder()
-                    .id(result.getId())
-                    .name(result.getName())
-                    .email(result.getEmail())
-                    .gender(result.getGender())
-                    .status(result.getStatus())
+                        .id(result.getId())
+                        .name(result.getName())
+                        .email(result.getEmail())
+                        .gender(result.getGender())
+                        .status(result.getStatus())
                     .build())
                     .forEach(user -> {
                 user2Repository.save(user);
             });
+        }
+    }
+
+    @Transactional
+    public void saveUsers4(List<ResponseItem2> list) {
+        if(list.size() > 0) {
+            list.stream().map(result -> UserEntity4.builder()
+                        .website(result.getWebsite())
+                        .zipcode(result.getAddress().getZipcode())
+                        .phone(result.getPhone())
+                        .name(result.getName())
+                        .id(result.getId())
+                        .username(result.getUsername())
+                        .city(result.getAddress().getCity())
+                        .street(result.getAddress().getStreet())
+                        .suite(result.getAddress().getSuite())
+                    .build())
+                    .forEach(user -> {
+                        user4Repository.save(user);
+                    });
         }
     }
 }

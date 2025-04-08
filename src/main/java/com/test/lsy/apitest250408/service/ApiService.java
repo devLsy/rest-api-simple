@@ -62,9 +62,14 @@ public class ApiService {
 
     // api 4
     public List<ResponseItem2> callApi4() {
-        return restTemplate.exchange(url4,
+        List<ResponseItem2> list = restTemplate.exchange(url4,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<ResponseItem2>>() {}).getBody();
+                new ParameterizedTypeReference<List<ResponseItem2>>() {
+                }).getBody();
+
+        userService.saveUsers4(list);
+
+        return list;
     }
 }
