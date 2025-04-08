@@ -6,7 +6,7 @@ import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
 
 public class StringUtils {
 
-    // 인자값으로 받은 키값으로 암호화 후 그 객체 반환
+    // 인자값으로 받은 키값을 가진 암복호화 가능한 객체 반환
     public static StringEncryptor getEncryptor(String key) {
         // Config
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
