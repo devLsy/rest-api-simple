@@ -57,7 +57,11 @@ public class ApiService {
     }
     // api 3
     public Response3 callApi3() {
-        return restTemplate.getForObject(url3, Response3.class);
+        Response3 response = restTemplate.getForObject(url3, Response3.class);
+
+        userService.saveUsers3(response);
+
+        return response;
     }
 
     // api 4

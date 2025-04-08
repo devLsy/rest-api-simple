@@ -1,18 +1,14 @@
 package com.test.lsy.apitest250408.service;
 
-import com.test.lsy.apitest250408.dto.entity.InfoEntity;
-import com.test.lsy.apitest250408.dto.entity.UserEntity;
-import com.test.lsy.apitest250408.dto.entity.UserEntity2;
-import com.test.lsy.apitest250408.dto.entity.UserEntity4;
+import com.test.lsy.apitest250408.dto.entity.*;
 import com.test.lsy.apitest250408.dto.response1.Info;
 import com.test.lsy.apitest250408.dto.response1.Response;
 import com.test.lsy.apitest250408.dto.response1.ResultsItem;
 import com.test.lsy.apitest250408.dto.response2.ResponseItem1;
+import com.test.lsy.apitest250408.dto.response3.DataItem;
+import com.test.lsy.apitest250408.dto.response3.Response3;
 import com.test.lsy.apitest250408.dto.response4.ResponseItem2;
-import com.test.lsy.apitest250408.repository.InfoRepository;
-import com.test.lsy.apitest250408.repository.User2Repository;
-import com.test.lsy.apitest250408.repository.User4Repository;
-import com.test.lsy.apitest250408.repository.UserRepository;
+import com.test.lsy.apitest250408.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,6 +24,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final User2Repository user2Repository;
     private final User4Repository user4Repository;
+    private final User5Repository user5Repository;
     private final InfoRepository infoRepository;
 
     @Transactional
@@ -93,6 +90,24 @@ public class UserService {
                     .build())
                     .forEach(user -> {
                         user4Repository.save(user);
+                    });
+        }
+    }
+
+    @Transactional
+    public void saveUsers3(Response3 response) {
+        if(response != null) {
+            List<DataItem> results = response.getData();
+
+            results.stream().map(result -> UserEntity5.builder()
+                            .id(result.getId())
+                            .email(result.getEmail())
+                            .firstName(result.getFirstName())
+                            .lastName(result.getFirstName())
+                            .avatar(result.getAvatar())
+                            .build())
+                    .forEach(user -> {
+                        user5Repository.save(user);
                     });
         }
     }
