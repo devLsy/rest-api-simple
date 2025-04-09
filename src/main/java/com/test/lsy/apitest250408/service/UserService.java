@@ -164,16 +164,17 @@ public class UserService {
                         .thumbnail(result.getPicture().getThumbnail())
                         .build();
                 pictureRepository.save(pictureEntity);
-
-    //            throw new RuntimeException("강제 에러");
+                // ❌ 아래처럼 체크드 예외(Exception)를 던지면 @Transactional은 기본적으로 롤백하지 않음
+//                throw new Exception("강제 에러");
+                // ✅ 아래처럼 언체크드 예외(RuntimeException)를 던져야 트랜잭션이 롤백됨
+//                 throw new RuntimeException("강제 에러");
             }
 
         } catch(Exception e) {
-            // 예외 발생 시 로그 출력
+            // 체크드 예외는 잡기만 하고 다시 던지지 않으면 롤백되지 않음
             log.error("saveUser5 중 예외 발생, 롤백합니다: {}", e.getMessage(), e);
-
-            // 다시 예외를 던져서 롤백 유도
-            throw new RuntimeException("saveUser5 실패 - 트랜잭션 롤백", e);
+            // ✅ 체크드 예외를 던진 경우 트랜잭션 롤백을 원하면 아래처럼 런타임 예외로 다시 던져야 함
+             throw new RuntimeException("saveUser5 실패 - 트랜잭션 롤백", e);
         }
     }
 }
