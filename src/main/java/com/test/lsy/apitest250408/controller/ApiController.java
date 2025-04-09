@@ -5,6 +5,7 @@ import com.test.lsy.apitest250408.dto.response2.ResponseItem1;
 import com.test.lsy.apitest250408.dto.response3.Response3;
 import com.test.lsy.apitest250408.dto.response4.ResponseItem2;
 import com.test.lsy.apitest250408.service.ApiService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@Tag(name = "User API", description = "사용자 관련 API")
 public class ApiController {
 
     private final ApiService service;
