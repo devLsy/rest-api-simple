@@ -30,6 +30,7 @@ public class UserService {
     private final LocationRepository locationRepository;
     private final PictureRepository pictureRepository;
     private final LoginRepository loginRepository;
+    private final TimezoneRepository timezoneRepository;
 
     @Transactional
     public void saveUsers(Response response) {
@@ -165,7 +166,14 @@ public class UserService {
                         .build();
                 pictureRepository.save(pictureEntity);
 //                throw new Exception("강제 에러");
-                 throw new RuntimeException("강제 에러");
+//                 throw new RuntimeException("강제 에러");
+
+                // 5. timezoneEntity 저장
+                TimezoneEntity timezone = TimezoneEntity.builder()
+                        .offset(result.getLocation().getTimezone().getOffset())
+                        .description(result.getLocation().getTimezone().getDescription())
+                        .build();
+                timezoneRepository.save(timezone);
             }
 
         } catch(Exception e) {
