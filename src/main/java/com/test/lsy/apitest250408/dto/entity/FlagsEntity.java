@@ -1,13 +1,14 @@
 package com.test.lsy.apitest250408.dto.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,7 +17,6 @@ import java.util.UUID;
 public class FlagsEntity {
 
     @Id
-    @Column(length = 36)
     private String id;
 
     @Schema(description = "png")
@@ -30,9 +30,7 @@ public class FlagsEntity {
     private String alt;
 
     @Builder
-
-    public FlagsEntity(String id, String png, String svg, String alt) {
-        this.id = UUID.randomUUID().toString();
+    public FlagsEntity(String png, String svg, String alt) {
         this.png = png;
         this.svg = svg;
         this.alt = alt;

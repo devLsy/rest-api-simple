@@ -1,13 +1,13 @@
 package com.test.lsy.apitest250408.dto.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,7 +16,6 @@ import java.util.UUID;
 public class CountyEntity {
 
     @Id
-    @Column(length = 36)
     private String id;
 
     @Schema(description = "국가명")
@@ -29,9 +28,7 @@ public class CountyEntity {
     private String region;
 
     @Builder
-
-    public CountyEntity(Long id, String countryName, String officialEngName, String region) {
-        this.id = UUID.randomUUID().toString();
+    public CountyEntity(String countryName, String officialEngName, String region) {
         this.countryName = countryName;
         this.officialEngName = officialEngName;
         this.region = region;

@@ -159,18 +159,18 @@ public class UserService {
             countyParams.add(region);
 
             // flags
-            String flagId = UUID.randomUUID().toString();
+            String alt = item.getFlags().getAlt();
             String png = item.getFlags().getPng();
             String svg = item.getFlags().getSvg();
-            String alt = item.getFlags().getAlt();
+            String flagId = UUID.randomUUID().toString();
 
             flagsSql.append("(?, ?, ?, ?)");
             if (i < list.size() - 1) flagsSql.append(", ");
 
             flagsParams.add(flagId);
+            flagsParams.add(alt);
             flagsParams.add(png);
             flagsParams.add(svg);
-            flagsParams.add(alt);
 
             i++;
         }
@@ -181,6 +181,8 @@ public class UserService {
 
         log.info("flag_tb sql : {}", flagsSql.toString());
         log.info("flag_tb param: {}", flagsParams);
+        jdbcTemplate.update(flagsSql.toString(), flagsParams.toArray());
+
         long endTime = System.currentTimeMillis(); // 종료 시간
         log.info("INSERT 실행 시간: {} ms", (endTime - startTime)); // 실행 시간 로그 출력
     }
