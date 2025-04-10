@@ -27,7 +27,8 @@ public class ApiController {
 
     @Operation(summary = "API 호출 1", description = "외부 API 1을 호출하여 사용자 정보 반환")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "정상적으로 사용자 정보를 반환함")
+            @ApiResponse(responseCode = "200", description = "정상적으로 사용자 정보를 반환함"),
+            @ApiResponse(responseCode = "500", description = "서버 오류 발생")
     })
     @GetMapping("/call-1")
     public Response call1() {
@@ -36,7 +37,8 @@ public class ApiController {
 
     @Operation(summary = "API 호출 2", description = "외부 API 2를 호출하여 사용자 리스트 반환")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "정상적으로 사용자 리스트 반환")
+            @ApiResponse(responseCode = "200", description = "정상적으로 사용자 리스트 반환"),
+            @ApiResponse(responseCode = "500", description = "서버 오류 발생")
     })
     @GetMapping("/call-2")
     public List<ResponseItem1> call2() {
@@ -45,7 +47,8 @@ public class ApiController {
 
     @Operation(summary = "API 호출 3", description = "외부 API 3 호출 결과 객체 반환")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "정상적으로 API 3 결과 반환")
+            @ApiResponse(responseCode = "200", description = "정상적으로 API 3 결과 반환"),
+            @ApiResponse(responseCode = "500", description = "서버 오류 발생")
     })
     @GetMapping("/call-3")
     public Response3 call3() {
@@ -54,7 +57,8 @@ public class ApiController {
 
     @Operation(summary = "API 호출 4", description = "외부 API 4 호출 후 리스트 형태 결과 반환")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "정상적으로 API 4 리스트 반환")
+            @ApiResponse(responseCode = "200", description = "정상적으로 API 4 리스트 반환"),
+            @ApiResponse(responseCode = "500", description = "서버 오류 발생")
     })
     @GetMapping("/call-4")
     public List<ResponseItem2> call4() {
@@ -64,7 +68,7 @@ public class ApiController {
     @Operation(summary = "API 호출 5", description = "외부 API 5 호출 후 DB 저장 처리 수행")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "정상 처리 완료"),
-            @ApiResponse(responseCode = "500", description = "서버 오류 발생 시 롤백 처리됨")
+            @ApiResponse(responseCode = "500", description = "서버 오류 발생")
     })
     @PostMapping("/call-5")
     public void call5() {
