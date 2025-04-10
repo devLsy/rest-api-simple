@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -125,64 +124,64 @@ public class UserService {
     }
     
     // jdbcTemplate bulk insert방식
-    @Transactional
-    public void saveUsers5(List<ResponseItem5> list) {
-        if (list.isEmpty()) return;
-
-        long startTime = System.currentTimeMillis(); // 시작 시간
-
-        // ---------------------
-        // bulk insert into county_tb
-        // ---------------------
-        StringBuilder countySql = new StringBuilder("INSERT INTO country_tb (id, countryName, officialEngName, region) VALUES ");
-        List<Object> countyParams = new ArrayList<>();
-
-        int i = 0;
-        for (ResponseItem5 item : list) {
-            String countryName = item.getName().getCommon();
-            String officialName = item.getName().getOfficial();
-            String region = item.getRegion();
-            String id = UUID.randomUUID().toString();
-
-            countySql.append("(?, ?, ?, ?)");
-
-            if (i < list.size() - 1) countySql.append(", ");
-
-            countyParams.add(id);
-            countyParams.add(countryName);
-            countyParams.add(officialName);
-            countyParams.add(region);
-
-            i++;
-        }
-
-        log.info("sql : {}", countySql.toString());
-        log.info("query param: {}", countyParams);
-
-        jdbcTemplate.update(countySql.toString(), countyParams.toArray());
-
-        long endTime = System.currentTimeMillis(); // 종료 시간
-        log.info("INSERT 실행 시간: {} ms", (endTime - startTime)); // 실행 시간 로그 출력
-    }
-
-    // 기존 jpa bastch insert 방식
 //    @Transactional
 //    public void saveUsers5(List<ResponseItem5> list) {
-
-//    long startTime = System.currentTimeMillis(); // 시작 시간
+//        if (list.isEmpty()) return;
 //
-//        List<CountyEntity> countyEntities = new ArrayList<>();
-//        List<FlagsEntity> flagsEntities = new ArrayList<>();
+//        long startTime = System.currentTimeMillis(); // 시작 시간
 //
+//        // ---------------------
+//        // bulk insert into county_tb
+//        // ---------------------
+//        StringBuilder countySql = new StringBuilder("INSERT INTO country_tb (id, countryName, officialEngName, region) VALUES ");
+//        List<Object> countyParams = new ArrayList<>();
+//
+//        int i = 0;
 //        for (ResponseItem5 item : list) {
-//            countyEntities.add(
-//                    CountyEntity.builder()
-//                            .countryName(item.getName().getCommon())
-//                            .officialEngName(item.getName().getOfficial())
-//                            .region(item.getRegion())
-//                            .build()
-//            );
+//            String countryName = item.getName().getCommon();
+//            String officialName = item.getName().getOfficial();
+//            String region = item.getRegion();
+//            String id = UUID.randomUUID().toString();
 //
+//            countySql.append("(?, ?, ?, ?)");
+//
+//            if (i < list.size() - 1) countySql.append(", ");
+//
+//            countyParams.add(id);
+//            countyParams.add(countryName);
+//            countyParams.add(officialName);
+//            countyParams.add(region);
+//
+//            i++;
+//        }
+//
+//        log.info("sql : {}", countySql.toString());
+//        log.info("query param: {}", countyParams);
+//
+//        jdbcTemplate.update(countySql.toString(), countyParams.toArray());
+//
+//        long endTime = System.currentTimeMillis(); // 종료 시간
+//        log.info("INSERT 실행 시간: {} ms", (endTime - startTime)); // 실행 시간 로그 출력
+//    }
+
+    // 기존 jpa bastch insert 방식
+    @Transactional
+    public void saveUsers5(List<ResponseItem5> list) {
+
+    long startTime = System.currentTimeMillis(); // 시작 시간
+
+        List<CountyEntity> countyEntities = new ArrayList<>();
+        List<FlagsEntity> flagsEntities = new ArrayList<>();
+
+        for (ResponseItem5 item : list) {
+            countyEntities.add(
+                    CountyEntity.builder()
+                            .countryName(item.getName().getCommon())
+                            .officialEngName(item.getName().getOfficial())
+                            .region(item.getRegion())
+                            .build()
+            );
+
 //            flagsEntities.add(
 //                    FlagsEntity.builder()
 //                            .png(item.getFlags().getPng())
@@ -190,14 +189,14 @@ public class UserService {
 //                            .alt(item.getFlags().getAlt())
 //                            .build()
 //            );
-//        }
-//
-//        countyRepository.saveAll(countyEntities);
-//        flagsRepository.saveAll(flagsEntities);
+        }
 
-//    long endTime = System.currentTimeMillis(); // 종료 시간
-//    log.info("saveAll 실행 시간: {} ms", (endTime - startTime)); // 실행 시간 로그
-//    }
+        countyRepository.saveAll(countyEntities);
+        flagsRepository.saveAll(flagsEntities);
+
+    long endTime = System.currentTimeMillis(); // 종료 시간
+    log.info("saveAll 실행 시간: {} ms", (endTime - startTime)); // 실행 시간 로그
+    }
 
     @Transactional
     public void saveUser6(Response response) {
