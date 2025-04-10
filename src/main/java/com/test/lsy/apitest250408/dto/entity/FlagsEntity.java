@@ -7,15 +7,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "flag_tb")
 public class FlagsEntity {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long id;
+    @Column(length = 36)
+    private String id;
 
     @Schema(description = "png")
     private String png;
@@ -28,7 +30,9 @@ public class FlagsEntity {
     private String alt;
 
     @Builder
-    public FlagsEntity(String png, String svg, String alt) {
+
+    public FlagsEntity(String id, String png, String svg, String alt) {
+        this.id = UUID.randomUUID().toString();
         this.png = png;
         this.svg = svg;
         this.alt = alt;

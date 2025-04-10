@@ -7,15 +7,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "country_tb")
 public class CountyEntity {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long id;
+    @Column(length = 36)
+    private String id;
 
     @Schema(description = "국가명")
     private String countryName;
@@ -27,7 +29,9 @@ public class CountyEntity {
     private String region;
 
     @Builder
-    public CountyEntity(String countryName, String officialEngName, String region) {
+
+    public CountyEntity(Long id, String countryName, String officialEngName, String region) {
+        this.id = UUID.randomUUID().toString();
         this.countryName = countryName;
         this.officialEngName = officialEngName;
         this.region = region;

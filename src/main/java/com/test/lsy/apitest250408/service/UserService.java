@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -122,22 +123,30 @@ public class UserService {
 
     @Transactional
     public void saveUsers5(List<ResponseItem5> list) {
+
+        List<CountyEntity> countyEntities = new ArrayList<>();
+        List<FlagsEntity> flagsEntities = new ArrayList<>();
+
         for (ResponseItem5 item : list) {
-            CountyEntity countyEntity = CountyEntity.builder()
-                    .countryName(item.getName().getCommon())
-                    .officialEngName(item.getName().getOfficial())
-                    .region(item.getRegion())
-                    .build();
+            countyEntities.add(
+                    CountyEntity.builder()
+                            .countryName(item.getName().getCommon())
+                            .officialEngName(item.getName().getOfficial())
+                            .region(item.getRegion())
+                            .build()
+            );
 
-            FlagsEntity flagsEntity = FlagsEntity.builder()
-                    .png(item.getFlags().getPng())
-                    .svg(item.getFlags().getSvg())
-                    .alt(item.getFlags().getAlt())
-                    .build();
-
-            countyRepository.save(countyEntity);
-            flagsRepository.save(flagsEntity);
+            flagsEntities.add(
+                    FlagsEntity.builder()
+                            .png(item.getFlags().getPng())
+                            .svg(item.getFlags().getSvg())
+                            .alt(item.getFlags().getAlt())
+                            .build()
+            );
         }
+
+        countyRepository.saveAll(countyEntities);
+        flagsRepository.saveAll(flagsEntities);
     }
 
     @Transactional
