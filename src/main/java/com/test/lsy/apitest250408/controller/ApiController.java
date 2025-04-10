@@ -70,8 +70,9 @@ public class ApiController {
 
     @Operation(summary = "API 호출 5", description = "외부 API 5 호출 후 리스트 형태 결과 반환")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "정상적으로 API 5 리스트 반환"),
-            @ApiResponse(responseCode = "500", description = "서버 오류 발생")
+            @ApiResponse(responseCode = "200", description = "정상적으로 국가 데이터 반환"),
+            @ApiResponse(responseCode = "404", description = "해당 국가 없음"),
+            @ApiResponse(responseCode = "502", description = "외부 API 호출 실패")
     })
     @GetMapping("/call-5")
     public List<ResponseItem5> call5(

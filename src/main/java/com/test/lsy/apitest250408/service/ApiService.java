@@ -11,8 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -84,21 +88,21 @@ public class ApiService {
     // api 5
     public List<ResponseItem5> callApi5(String name) {
 
-        String endpoint = (name != null && !name.isBlank())
-                ? "/name/" + name
-                : "/all";
+        String fullUrl = url5 + (name == null || name.isBlank() ? "/all" : "/name/" + name);
 
-        String fullUrl = url5 + endpoint;
-
-        List<ResponseItem5> list = restTemplate.exchange(fullUrl,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<ResponseItem5>>() {
-                }).getBody();
-
-//        userService.saveUsers5(list);
-
-        return list;
+        try {
+            return restTemplate.exchange(
+                    fullUrl,
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<List<ResponseItem5>>() {
+                    }).getBody();
+    //        userService.saveUsers5(list);
+        } catch (HttpClientErrorException.NotFound e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found Country.");
+        } catch(RestClientException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "외부 API 호출 실패");
+        }
     }
 
     public void callApi6() {
