@@ -4,8 +4,10 @@ import com.test.lsy.apitest250408.dto.response1.Response;
 import com.test.lsy.apitest250408.dto.response2.ResponseItem1;
 import com.test.lsy.apitest250408.dto.response3.Response3;
 import com.test.lsy.apitest250408.dto.response4.ResponseItem2;
+import com.test.lsy.apitest250408.dto.response5.ResponseItem5;
 import com.test.lsy.apitest250408.service.ApiService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -65,13 +68,25 @@ public class ApiController {
         return service.callApi4();
     }
 
-    @Operation(summary = "API 호출 5", description = "외부 API 5 호출 후 DB 저장 처리 수행")
+    @Operation(summary = "API 호출 5", description = "외부 API 5 호출 후 리스트 형태 결과 반환")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "정상적으로 API 5 리스트 반환"),
+            @ApiResponse(responseCode = "500", description = "서버 오류 발생")
+    })
+    @GetMapping("/call-5")
+    public List<ResponseItem5> call5(
+            @Parameter(description = "도시명 (예: korea, usa)", example = "korea")
+            @RequestParam(name = "name",required = true) String name) {
+        return service.callApi5(name);
+    }
+
+    @Operation(summary = "API 호출 6", description = "외부 API 6 호출 후 DB 저장 처리 수행")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "정상 처리 완료"),
             @ApiResponse(responseCode = "500", description = "서버 오류 발생")
     })
-    @PostMapping("/call-5")
-    public void call5() {
-        service.callApi5();
+    @PostMapping("/call-6")
+    public void call6() {
+        service.callApi6();
     }
 }

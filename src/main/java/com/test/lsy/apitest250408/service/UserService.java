@@ -8,6 +8,7 @@ import com.test.lsy.apitest250408.dto.response2.ResponseItem1;
 import com.test.lsy.apitest250408.dto.response3.DataItem;
 import com.test.lsy.apitest250408.dto.response3.Response3;
 import com.test.lsy.apitest250408.dto.response4.ResponseItem2;
+import com.test.lsy.apitest250408.dto.response5.ResponseItem5;
 import com.test.lsy.apitest250408.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -100,6 +101,10 @@ public class UserService {
     }
 
     @Transactional
+    public void saveUsers5(List<ResponseItem5> list) {
+    }
+
+    @Transactional
     public void saveUsers3(Response3 response) {
         if(response != null) {
             List<DataItem> results = response.getData();
@@ -118,7 +123,7 @@ public class UserService {
     }
 
     @Transactional
-    public void saveUser5(Response response) {
+    public void saveUser6(Response response) {
         List<ResultsItem> results = response.getResults();
         Info info = response.getInfo();
 

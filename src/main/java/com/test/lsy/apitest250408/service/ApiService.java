@@ -4,6 +4,7 @@ import com.test.lsy.apitest250408.dto.response1.Response;
 import com.test.lsy.apitest250408.dto.response2.ResponseItem1;
 import com.test.lsy.apitest250408.dto.response3.Response3;
 import com.test.lsy.apitest250408.dto.response4.ResponseItem2;
+import com.test.lsy.apitest250408.dto.response5.ResponseItem5;
 import com.test.lsy.apitest250408.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,9 @@ public class ApiService {
 
     @Value("${api.url4}")
     private String url4;
+
+    @Value("${api.url5}")
+    private String url5;
 
     // api 1
     public Response callApi1() {
@@ -77,7 +81,27 @@ public class ApiService {
         return list;
     }
 
-    public void callApi5() {
-        userService.saveUser5(restTemplate.getForObject(url1, Response.class));
+    // api 5
+    public List<ResponseItem5> callApi5(String name) {
+
+        String endpoint = (name != null && !name.isBlank())
+                ? "/name/" + name
+                : "/all";
+
+        String fullUrl = url5 + endpoint;
+
+        List<ResponseItem5> list = restTemplate.exchange(fullUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<ResponseItem5>>() {
+                }).getBody();
+
+//        userService.saveUsers5(list);
+
+        return list;
+    }
+
+    public void callApi6() {
+        userService.saveUser6(restTemplate.getForObject(url1, Response.class));
     }
 }
