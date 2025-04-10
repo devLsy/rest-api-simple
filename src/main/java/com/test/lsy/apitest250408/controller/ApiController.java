@@ -76,8 +76,8 @@ public class ApiController {
     })
     @GetMapping("/call-5")
     public List<ResponseItem5> call5(
-            @Parameter(description = "도시명 (예: korea, usa)", example = "korea")
-            @RequestParam(name = "name",required = true) String name) {
+            @Parameter(description = "국가명 (예: korea, usa)")
+            @RequestParam(name = "name",required = false) String name) {
         return service.callApi5(name);
     }
 

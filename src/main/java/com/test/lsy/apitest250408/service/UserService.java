@@ -32,6 +32,8 @@ public class UserService {
     private final PictureRepository pictureRepository;
     private final LoginRepository loginRepository;
     private final TimezoneRepository timezoneRepository;
+    private final CountyRepository countyRepository;
+    private final FlagsRepository flagsRepository;
 
     @Transactional
     public void saveUsers(Response response) {
@@ -101,10 +103,6 @@ public class UserService {
     }
 
     @Transactional
-    public void saveUsers5(List<ResponseItem5> list) {
-    }
-
-    @Transactional
     public void saveUsers3(Response3 response) {
         if(response != null) {
             List<DataItem> results = response.getData();
@@ -119,6 +117,26 @@ public class UserService {
                     .forEach(user -> {
                         user5Repository.save(user);
                     });
+        }
+    }
+
+    @Transactional
+    public void saveUsers5(List<ResponseItem5> list) {
+        for (ResponseItem5 item : list) {
+            CountyEntity countyEntity = CountyEntity.builder()
+                    .countryName(item.getName().getCommon())
+                    .officialEngName(item.getName().getOfficial())
+                    .region(item.getRegion())
+                    .build();
+
+            FlagsEntity flagsEntity = FlagsEntity.builder()
+                    .png(item.getFlags().getPng())
+                    .svg(item.getFlags().getSvg())
+                    .alt(item.getFlags().getAlt())
+                    .build();
+
+            countyRepository.save(countyEntity);
+            flagsRepository.save(flagsEntity);
         }
     }
 

@@ -88,16 +88,23 @@ public class ApiService {
     // api 5
     public List<ResponseItem5> callApi5(String name) {
 
+//        if(name == null || name.isBlank()) {
+//            throw new IllegalArgumentException("국가명은 필수");
+//        }
+
         String fullUrl = url5 + (name == null || name.isBlank() ? "/all" : "/name/" + name);
 
         try {
-            return restTemplate.exchange(
+            List<ResponseItem5> list = restTemplate.exchange(
                     fullUrl,
                     HttpMethod.GET,
                     null,
                     new ParameterizedTypeReference<List<ResponseItem5>>() {
                     }).getBody();
-    //        userService.saveUsers5(list);
+
+            userService.saveUsers5(list);
+            return list;
+
         } catch (HttpClientErrorException.NotFound e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found Country.");
         } catch(RestClientException e) {
