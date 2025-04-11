@@ -123,68 +123,77 @@ public class UserService {
                     });
         }
     }
-    
-    // jdbcTemplate bulk insert방식
+
     @Transactional
     public void saveUsers5(List<ResponseItem5> list) {
         if (list.isEmpty()) return;
 
+        final int BATCH_SIZE = 100;
+
         long startTime = System.currentTimeMillis(); // 시작 시간
 
-        // ---------------------
-        // bulk insert into county_tb
-        // ---------------------
-        StringBuilder countySql = new StringBuilder("INSERT INTO country_tb (id, countryName, officialEngName, region) VALUES ");
-        List<Object> countyParams = new ArrayList<>();
+        log.info("list size() : {}", list.size() -1);
 
-        // ---------------------
-        // bulk insert into flag_tb
-        // ---------------------
-        StringBuilder flagsSql = new StringBuilder("INSERT INTO flag_tb (id, alt, png, svg) VALUES ");
-        List<Object> flagsParams = new ArrayList<>();
+        for (int start = 0; start < list.size(); start += BATCH_SIZE) {
+            int end = Math.min(start + BATCH_SIZE, list.size());
+            List<ResponseItem5> batchList = list.subList(start, end);
+            log.info("batchList size() : {}", batchList.size());
 
-        int i = 0;
-        for (ResponseItem5 item : list) {
-            String countryName = item.getName().getCommon();
-            String officialName = item.getName().getOfficial();
-            String region = item.getRegion();
-            String countryId = UUID.randomUUID().toString();
+            // ---------------------
+            // bulk insert into country_tb
+            // ---------------------
+            StringBuilder countrySql = new StringBuilder("INSERT INTO country_tb (id, countryName, officialEngName, region) VALUES ");
+            List<Object> countryParams = new ArrayList<>();
 
-            countySql.append("(?, ?, ?, ?)");
-            if (i < list.size() - 1) countySql.append(", ");
+            // ---------------------
+            // bulk insert into flag_tb
+            // ---------------------
+            StringBuilder flagSql = new StringBuilder("INSERT INTO flag_tb (id, alt, png, svg) VALUES ");
+            List<Object> flagParams = new ArrayList<>();
 
-            countyParams.add(countryId);
-            countyParams.add(countryName);
-            countyParams.add(officialName);
-            countyParams.add(region);
+            for (int i = 0; i < batchList.size(); i++) {
+                ResponseItem5 item = batchList.get(i);
 
-            // flags
-            String alt = item.getFlags().getAlt();
-            String png = item.getFlags().getPng();
-            String svg = item.getFlags().getSvg();
-            String flagId = UUID.randomUUID().toString();
+                // country
+                String countryName = item.getName().getCommon();
+                String officialName = item.getName().getOfficial();
+                String region = item.getRegion();
+                String countryId = UUID.randomUUID().toString();
 
-            flagsSql.append("(?, ?, ?, ?)");
-            if (i < list.size() - 1) flagsSql.append(", ");
+                countrySql.append("(?, ?, ?, ?)");
+                if (i < batchList.size() - 1) countrySql.append(", ");
 
-            flagsParams.add(flagId);
-            flagsParams.add(alt);
-            flagsParams.add(png);
-            flagsParams.add(svg);
+                countryParams.add(countryId);
+                countryParams.add(countryName);
+                countryParams.add(officialName);
+                countryParams.add(region);
 
-            i++;
+                // flag
+                String alt = item.getFlags().getAlt();
+                String png = item.getFlags().getPng();
+                String svg = item.getFlags().getSvg();
+                String flagId = UUID.randomUUID().toString();
+
+                flagSql.append("(?, ?, ?, ?)");
+                if (i < batchList.size() - 1) flagSql.append(", ");
+
+                flagParams.add(flagId);
+                flagParams.add(alt);
+                flagParams.add(png);
+                flagParams.add(svg);
+            }
+
+//            log.info("country_tb sql : {}", countrySql.toString());
+//            log.info("country_tb param: {}", countryParams);
+//            jdbcTemplate.update(countrySql.toString(), countryParams.toArray());
+
+//            log.info("flag_tb sql : {}", flagSql.toString());
+//            log.info("flag_tb param: {}", flagParams);
+//            jdbcTemplate.update(flagSql.toString(), flagParams.toArray());
         }
 
-        log.info("country_tb sql : {}", countySql.toString());
-        log.info("country_tb param: {}", countyParams);
-        jdbcTemplate.update(countySql.toString(), countyParams.toArray());
-
-        log.info("flag_tb sql : {}", flagsSql.toString());
-        log.info("flag_tb param: {}", flagsParams);
-        jdbcTemplate.update(flagsSql.toString(), flagsParams.toArray());
-
         long endTime = System.currentTimeMillis(); // 종료 시간
-        log.info("INSERT 실행 시간: {} ms", (endTime - startTime)); // 실행 시간 로그 출력
+        log.info("전체 INSERT 실행 시간: {} ms", (endTime - startTime)); // 전체 실행 시간 로그
     }
 
     // 기존 jpa bastch insert 방식
