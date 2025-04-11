@@ -183,13 +183,13 @@ public class UserService {
                 flagParams.add(svg);
             }
 
-//            log.info("country_tb sql : {}", countrySql.toString());
-//            log.info("country_tb param: {}", countryParams);
-//            jdbcTemplate.update(countrySql.toString(), countryParams.toArray());
-
-//            log.info("flag_tb sql : {}", flagSql.toString());
-//            log.info("flag_tb param: {}", flagParams);
-//            jdbcTemplate.update(flagSql.toString(), flagParams.toArray());
+            log.info("country_tb sql : {}", countrySql.toString());
+            log.info("country_tb param: {}", countryParams);
+            jdbcTemplate.update(countrySql.toString(), countryParams.toArray());
+//
+            log.info("flag_tb sql : {}", flagSql.toString());
+            log.info("flag_tb param: {}", flagParams);
+            jdbcTemplate.update(flagSql.toString(), flagParams.toArray());
         }
 
         long endTime = System.currentTimeMillis(); // 종료 시간
